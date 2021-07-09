@@ -10,8 +10,9 @@ You are still able to make changes to the files and see the changes realtime as 
 communication with the UI are done through rest APIs and socket.io
 
 # How to run
-Just run
-`docker-compose up`
+- Just run `docker-compose up`
+- Visit http://localhost:3000  
+- try changing statuses of the shipments
 
 *make sure that the following ports are free on your system to run the app properly*
 - 3000 - for react UI
