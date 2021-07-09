@@ -3,9 +3,9 @@ This demo project shows how you can use 2 node applications as a Kafka Producer 
 You are still able to make changes to the files and see the changes realtime as the source folders are mounted as volumes
 
 ## Project has 3 components
-React UI
-Node app as a producer
-Node app as a consumer
+- React UI
+- Node app as a producer
+- Node app as a consumer
 
 communication with the UI are done through rest APIs and socket.io
 
