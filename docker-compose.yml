@@ -1,0 +1,70 @@
+version: '3.4'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-demo:
+    container_name: kafka-demo
+    build:
+      context: ./kafka-demo
+      dockerfile: Dockerfile
+    volumes:
+        - ./kafka-demo/src:/var/www/src
+        - ./kafka-demo/public:/var/www/public
+    ports:
+      - 3000:3000
+
+  node-producer:
+    container_name: node-producer
+    build:
+      context: ./node-producer
+      dockerfile: Dockerfile
+    volumes:
+        - ./node-producer/src:/var/www/src
+    ports:
+      - 9000:9000
+    environment:
+      - KAFKA_HOST=kafka:9092
+
+  node-consumer:
+    container_name: node-consumer
+    build:
+      context: ./node-consumer
+      dockerfile: Dockerfile
+    volumes:
+       - ./node-consumer/src:/var/www/src
+    ports:
+      - 9001:9001
+    environment:
+      - KAFKA_HOST=kafka:9092
+
+  node-consumer2:
+    container_name: node-consumer2
+    build:
+      context: ./node-consumer
+      dockerfile: Dockerfile
+    volumes:
+        - ./node-consumer/src:/var/www/src
+    ports:
+      - 9002:9001
+    environment:
+      - KAFKA_HOST=kafka:9092
